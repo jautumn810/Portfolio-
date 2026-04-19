@@ -3,13 +3,29 @@ info:
   # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: TruckLink API specification
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: auth
+    description: Authentication
+  - name: users
+    description: User management
+  - name: trucks
+    description: Truck fleet management
+  - name: loads
+    description: Load/freight management
+  - name: bids
+    description: Load bidding
+  - name: routes
+    description: Route optimization
+  - name: analytics
+    description: Platform analytics
+  - name: chat
+    description: AI chatbot
 paths:
   /healthz:
     get:
@@ -24,7 +40,607 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  /auth/login:
+    post:
+      operationId: login
+      tags: [auth]
+      summary: Login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginBody"
+      responses:
+        "200":
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+        "401":
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /auth/register:
+    post:
+      operationId: register
+      tags: [auth]
+      summary: Register
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterBody"
+      responses:
+        "201":
+          description: Registration successful
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+        "400":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /auth/me:
+    get:
+      operationId: getMe
+      tags: [auth]
+      summary: Get current user
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Current user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /users:
+    get:
+      operationId: listUsers
+      tags: [users]
+      summary: List all users
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: List of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/User"
+
+  /users/{id}:
+    get:
+      operationId: getUser
+      tags: [users]
+      summary: Get user by ID
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: User
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    patch:
+      operationId: updateUser
+      tags: [users]
+      summary: Update user
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateUserBody"
+      responses:
+        "200":
+          description: Updated user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+
+  /trucks:
+    get:
+      operationId: listTrucks
+      tags: [trucks]
+      summary: List all trucks
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [available, in_transit, maintenance, inactive]
+        - name: ownerId
+          in: query
+          schema:
+            type: ["integer", "null"]
+      responses:
+        "200":
+          description: List of trucks
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Truck"
+    post:
+      operationId: createTruck
+      tags: [trucks]
+      summary: Create a truck
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateTruckBody"
+      responses:
+        "201":
+          description: Created truck
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Truck"
+
+  /trucks/{id}:
+    get:
+      operationId: getTruck
+      tags: [trucks]
+      summary: Get truck by ID
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Truck
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Truck"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    patch:
+      operationId: updateTruck
+      tags: [trucks]
+      summary: Update truck
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateTruckBody"
+      responses:
+        "200":
+          description: Updated truck
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Truck"
+    delete:
+      operationId: deleteTruck
+      tags: [trucks]
+      summary: Delete truck
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  /loads:
+    get:
+      operationId: listLoads
+      tags: [loads]
+      summary: List all loads
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [posted, bidding, assigned, in_transit, delivered, cancelled]
+        - name: shipperId
+          in: query
+          schema:
+            type: ["integer", "null"]
+        - name: assignedDriverId
+          in: query
+          schema:
+            type: ["integer", "null"]
+      responses:
+        "200":
+          description: List of loads
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Load"
+    post:
+      operationId: createLoad
+      tags: [loads]
+      summary: Create a load
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateLoadBody"
+      responses:
+        "201":
+          description: Created load
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Load"
+
+  /loads/{id}:
+    get:
+      operationId: getLoad
+      tags: [loads]
+      summary: Get load by ID
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Load
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Load"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    patch:
+      operationId: updateLoad
+      tags: [loads]
+      summary: Update load
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateLoadBody"
+      responses:
+        "200":
+          description: Updated load
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Load"
+    delete:
+      operationId: deleteLoad
+      tags: [loads]
+      summary: Delete load
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  /loads/{id}/bids:
+    get:
+      operationId: getLoadBids
+      tags: [bids]
+      summary: Get bids for a load
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Bids for load
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Bid"
+
+  /bids:
+    get:
+      operationId: listBids
+      tags: [bids]
+      summary: List all bids
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: bidderId
+          in: query
+          schema:
+            type: ["integer", "null"]
+        - name: loadId
+          in: query
+          schema:
+            type: ["integer", "null"]
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [pending, accepted, rejected, withdrawn]
+      responses:
+        "200":
+          description: List of bids
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Bid"
+    post:
+      operationId: createBid
+      tags: [bids]
+      summary: Place a bid on a load
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateBidBody"
+      responses:
+        "201":
+          description: Created bid
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Bid"
+
+  /bids/{id}:
+    patch:
+      operationId: updateBid
+      tags: [bids]
+      summary: Update bid status (accept/reject)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateBidBody"
+      responses:
+        "200":
+          description: Updated bid
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Bid"
+    delete:
+      operationId: deleteBid
+      tags: [bids]
+      summary: Withdraw a bid
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  /routes/optimize:
+    post:
+      operationId: optimizeRoute
+      tags: [routes]
+      summary: Get route optimization suggestions
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OptimizeRouteBody"
+      responses:
+        "200":
+          description: Optimized route
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OptimizedRoute"
+
+  /analytics/dashboard:
+    get:
+      operationId: getDashboardAnalytics
+      tags: [analytics]
+      summary: Get dashboard summary analytics
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Dashboard analytics
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DashboardAnalytics"
+
+  /analytics/loads:
+    get:
+      operationId: getLoadsAnalytics
+      tags: [analytics]
+      summary: Get load analytics over time
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Load analytics
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/LoadAnalyticsPoint"
+
+  /analytics/revenue:
+    get:
+      operationId: getRevenueAnalytics
+      tags: [analytics]
+      summary: Get revenue analytics
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Revenue analytics
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/RevenuePoint"
+
+  /chat/message:
+    post:
+      operationId: sendChatMessage
+      tags: [chat]
+      summary: Send a message to the AI chatbot
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ChatMessageBody"
+      responses:
+        "200":
+          description: Chatbot response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ChatResponse"
+
+  /trucks/telematics:
+    get:
+      operationId: getTruckTelematics
+      tags: [trucks]
+      summary: Get real-time telematics for all trucks
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Truck telematics data
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TruckTelematics"
+
 components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
   schemas:
     HealthStatus:
       type: object
@@ -34,3 +650,676 @@ components:
       required:
         - status
 
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+      required:
+        - error
+
+    LoginBody:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+      required:
+        - email
+        - password
+
+    RegisterBody:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+        name:
+          type: string
+        role:
+          type: string
+          enum: [admin, dispatcher, driver, carrier, shipper]
+        company:
+          type: ["string", "null"]
+        phone:
+          type: ["string", "null"]
+      required:
+        - email
+        - password
+        - name
+        - role
+
+    AuthResponse:
+      type: object
+      properties:
+        token:
+          type: string
+        user:
+          $ref: "#/components/schemas/User"
+      required:
+        - token
+        - user
+
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        email:
+          type: string
+        name:
+          type: string
+        role:
+          type: string
+          enum: [admin, dispatcher, driver, carrier, shipper]
+        company:
+          type: ["string", "null"]
+        phone:
+          type: ["string", "null"]
+        avatarUrl:
+          type: ["string", "null"]
+        rating:
+          type: ["number", "null"]
+        totalLoads:
+          type: integer
+        isActive:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - email
+        - name
+        - role
+        - totalLoads
+        - isActive
+        - createdAt
+
+    UpdateUserBody:
+      type: object
+      properties:
+        name:
+          type: string
+        company:
+          type: ["string", "null"]
+        phone:
+          type: ["string", "null"]
+        avatarUrl:
+          type: ["string", "null"]
+
+    Truck:
+      type: object
+      properties:
+        id:
+          type: integer
+        ownerId:
+          type: integer
+        make:
+          type: string
+        model:
+          type: string
+        year:
+          type: integer
+        licensePlate:
+          type: string
+        vin:
+          type: ["string", "null"]
+        truckType:
+          type: string
+          enum: [flatbed, dry_van, reefer, tanker, step_deck, lowboy, conestoga, auto_carrier]
+        status:
+          type: string
+          enum: [available, in_transit, maintenance, inactive]
+        maxWeight:
+          type: number
+        maxLength:
+          type: number
+        color:
+          type: ["string", "null"]
+        imageUrl:
+          type: ["string", "null"]
+        currentLat:
+          type: ["number", "null"]
+        currentLng:
+          type: ["number", "null"]
+        currentCity:
+          type: ["string", "null"]
+        currentState:
+          type: ["string", "null"]
+        mileage:
+          type: integer
+        fuelLevel:
+          type: ["number", "null"]
+        lastServiceDate:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+          format: date-time
+        owner:
+          $ref: "#/components/schemas/User"
+      required:
+        - id
+        - ownerId
+        - make
+        - model
+        - year
+        - licensePlate
+        - truckType
+        - status
+        - maxWeight
+        - maxLength
+        - mileage
+        - createdAt
+        - owner
+
+    CreateTruckBody:
+      type: object
+      properties:
+        make:
+          type: string
+        model:
+          type: string
+        year:
+          type: integer
+        licensePlate:
+          type: string
+        vin:
+          type: ["string", "null"]
+        truckType:
+          type: string
+          enum: [flatbed, dry_van, reefer, tanker, step_deck, lowboy, conestoga, auto_carrier]
+        maxWeight:
+          type: number
+        maxLength:
+          type: number
+        color:
+          type: ["string", "null"]
+        imageUrl:
+          type: ["string", "null"]
+      required:
+        - make
+        - model
+        - year
+        - licensePlate
+        - truckType
+        - maxWeight
+        - maxLength
+
+    UpdateTruckBody:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [available, in_transit, maintenance, inactive]
+        currentLat:
+          type: ["number", "null"]
+        currentLng:
+          type: ["number", "null"]
+        currentCity:
+          type: ["string", "null"]
+        currentState:
+          type: ["string", "null"]
+        fuelLevel:
+          type: ["number", "null"]
+        mileage:
+          type: integer
+        lastServiceDate:
+          type: ["string", "null"]
+
+    Load:
+      type: object
+      properties:
+        id:
+          type: integer
+        shipperId:
+          type: integer
+        assignedDriverId:
+          type: ["integer", "null"]
+        assignedTruckId:
+          type: ["integer", "null"]
+        title:
+          type: string
+        description:
+          type: ["string", "null"]
+        freightType:
+          type: string
+          enum: [general, refrigerated, hazmat, oversized, automotive, livestock, electronics, furniture]
+        status:
+          type: string
+          enum: [posted, bidding, assigned, in_transit, delivered, cancelled]
+        originCity:
+          type: string
+        originState:
+          type: string
+        originLat:
+          type: number
+        originLng:
+          type: number
+        destCity:
+          type: string
+        destState:
+          type: string
+        destLat:
+          type: number
+        destLng:
+          type: number
+        weight:
+          type: number
+        length:
+          type: ["number", "null"]
+        budget:
+          type: number
+        finalPrice:
+          type: ["number", "null"]
+        pickupDate:
+          type: string
+          format: date-time
+        deliveryDate:
+          type: string
+          format: date-time
+        distance:
+          type: ["number", "null"]
+        specialInstructions:
+          type: ["string", "null"]
+        bidCount:
+          type: integer
+        createdAt:
+          type: string
+          format: date-time
+        shipper:
+          $ref: "#/components/schemas/User"
+      required:
+        - id
+        - shipperId
+        - title
+        - freightType
+        - status
+        - originCity
+        - originState
+        - originLat
+        - originLng
+        - destCity
+        - destState
+        - destLat
+        - destLng
+        - weight
+        - budget
+        - pickupDate
+        - deliveryDate
+        - bidCount
+        - createdAt
+        - shipper
+
+    CreateLoadBody:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: ["string", "null"]
+        freightType:
+          type: string
+          enum: [general, refrigerated, hazmat, oversized, automotive, livestock, electronics, furniture]
+        originCity:
+          type: string
+        originState:
+          type: string
+        originLat:
+          type: number
+        originLng:
+          type: number
+        destCity:
+          type: string
+        destState:
+          type: string
+        destLat:
+          type: number
+        destLng:
+          type: number
+        weight:
+          type: number
+        length:
+          type: ["number", "null"]
+        budget:
+          type: number
+        pickupDate:
+          type: string
+          format: date-time
+        deliveryDate:
+          type: string
+          format: date-time
+        distance:
+          type: ["number", "null"]
+        specialInstructions:
+          type: ["string", "null"]
+      required:
+        - title
+        - freightType
+        - originCity
+        - originState
+        - originLat
+        - originLng
+        - destCity
+        - destState
+        - destLat
+        - destLng
+        - weight
+        - budget
+        - pickupDate
+        - deliveryDate
+
+    UpdateLoadBody:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [posted, bidding, assigned, in_transit, delivered, cancelled]
+        assignedDriverId:
+          type: ["integer", "null"]
+        assignedTruckId:
+          type: ["integer", "null"]
+        finalPrice:
+          type: ["number", "null"]
+        specialInstructions:
+          type: ["string", "null"]
+
+    Bid:
+      type: object
+      properties:
+        id:
+          type: integer
+        loadId:
+          type: integer
+        bidderId:
+          type: integer
+        truckId:
+          type: ["integer", "null"]
+        amount:
+          type: number
+        status:
+          type: string
+          enum: [pending, accepted, rejected, withdrawn]
+        note:
+          type: ["string", "null"]
+        estimatedPickup:
+          type: ["string", "null"]
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+        bidder:
+          $ref: "#/components/schemas/User"
+        load:
+          $ref: "#/components/schemas/Load"
+      required:
+        - id
+        - loadId
+        - bidderId
+        - amount
+        - status
+        - createdAt
+        - bidder
+        - load
+
+    CreateBidBody:
+      type: object
+      properties:
+        loadId:
+          type: integer
+        truckId:
+          type: ["integer", "null"]
+        amount:
+          type: number
+        note:
+          type: ["string", "null"]
+        estimatedPickup:
+          type: ["string", "null"]
+          format: date-time
+      required:
+        - loadId
+        - amount
+
+    UpdateBidBody:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [pending, accepted, rejected, withdrawn]
+        note:
+          type: ["string", "null"]
+
+    OptimizeRouteBody:
+      type: object
+      properties:
+        originCity:
+          type: string
+        originState:
+          type: string
+        originLat:
+          type: number
+        originLng:
+          type: number
+        destCity:
+          type: string
+        destState:
+          type: string
+        destLat:
+          type: number
+        destLng:
+          type: number
+        avoidTolls:
+          type: boolean
+        avoidHighways:
+          type: boolean
+      required:
+        - originCity
+        - originState
+        - originLat
+        - originLng
+        - destCity
+        - destState
+        - destLat
+        - destLng
+
+    OptimizedRoute:
+      type: object
+      properties:
+        distance:
+          type: number
+        duration:
+          type: number
+        fuelCost:
+          type: number
+        tollCost:
+          type: number
+        waypoints:
+          type: array
+          items:
+            $ref: "#/components/schemas/Waypoint"
+        alternativeRoutes:
+          type: array
+          items:
+            $ref: "#/components/schemas/RouteAlternative"
+      required:
+        - distance
+        - duration
+        - fuelCost
+        - tollCost
+        - waypoints
+        - alternativeRoutes
+
+    Waypoint:
+      type: object
+      properties:
+        city:
+          type: string
+        state:
+          type: string
+        lat:
+          type: number
+        lng:
+          type: number
+        type:
+          type: string
+          enum: [origin, waypoint, destination, rest_stop, fuel_stop]
+      required:
+        - city
+        - state
+        - lat
+        - lng
+        - type
+
+    RouteAlternative:
+      type: object
+      properties:
+        name:
+          type: string
+        distance:
+          type: number
+        duration:
+          type: number
+        fuelCost:
+          type: number
+        tollCost:
+          type: number
+      required:
+        - name
+        - distance
+        - duration
+        - fuelCost
+        - tollCost
+
+    DashboardAnalytics:
+      type: object
+      properties:
+        totalLoads:
+          type: integer
+        activeLoads:
+          type: integer
+        totalTrucks:
+          type: integer
+        availableTrucks:
+          type: integer
+        totalDrivers:
+          type: integer
+        activeDrivers:
+          type: integer
+        totalRevenue:
+          type: number
+        monthlyRevenue:
+          type: number
+        pendingBids:
+          type: integer
+        completedLoads:
+          type: integer
+        avgLoadValue:
+          type: number
+        onTimeDeliveryRate:
+          type: number
+      required:
+        - totalLoads
+        - activeLoads
+        - totalTrucks
+        - availableTrucks
+        - totalDrivers
+        - activeDrivers
+        - totalRevenue
+        - monthlyRevenue
+        - pendingBids
+        - completedLoads
+        - avgLoadValue
+        - onTimeDeliveryRate
+
+    LoadAnalyticsPoint:
+      type: object
+      properties:
+        month:
+          type: string
+        posted:
+          type: integer
+        delivered:
+          type: integer
+        cancelled:
+          type: integer
+      required:
+        - month
+        - posted
+        - delivered
+        - cancelled
+
+    RevenuePoint:
+      type: object
+      properties:
+        month:
+          type: string
+        revenue:
+          type: number
+        loads:
+          type: integer
+      required:
+        - month
+        - revenue
+        - loads
+
+    ChatMessageBody:
+      type: object
+      properties:
+        message:
+          type: string
+        context:
+          type: ["string", "null"]
+      required:
+        - message
+
+    ChatResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        quickReplies:
+          type: array
+          items:
+            type: string
+        timestamp:
+          type: string
+          format: date-time
+      required:
+        - message
+        - quickReplies
+        - timestamp
+
+    TruckTelematics:
+      type: object
+      properties:
+        truckId:
+          type: integer
+        lat:
+          type: number
+        lng:
+          type: number
+        speed:
+          type: number
+        heading:
+          type: number
+        fuelLevel:
+          type: number
+        engineTemp:
+          type: number
+        status:
+          type: string
+        lastUpdated:
+          type: string
+          format: date-time
+      required:
+        - truckId
+        - lat
+        - lng
+        - speed
+        - heading
+        - fuelLevel
+        - engineTemp
+        - status
+        - lastUpdated

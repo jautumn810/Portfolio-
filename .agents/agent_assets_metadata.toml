@@ -1,0 +1,26 @@
+uploads = []
+outputs = []
+
+[[generated]]
+id = "gDmmAU-tnJRnbVGHUb9oD"
+uri = "file://artifacts/trucklink/src/assets/hero-truck.png"
+type = "image"
+title = "Hero red semi truck sunset"
+
+[[generated]]
+id = "ps1Nco32NDgCTwb9z0UWk"
+uri = "file://artifacts/trucklink/src/assets/truck-flatbed.png"
+type = "image"
+title = "Flatbed truck"
+
+[[generated]]
+id = "gXO6-kYMX0mMCxGO5-8lk"
+uri = "file://artifacts/trucklink/src/assets/truck-dry-van.png"
+type = "image"
+title = "Dry van truck"
+
+[[generated]]
+id = "91jbEhidEMoRghVuQJI8v"
+uri = "file://artifacts/trucklink/src/assets/truck-tanker.png"
+type = "image"
+title = "Tanker truck"
