@@ -33,11 +33,11 @@ router.get("/analytics/dashboard", requireAuth, async (req, res): Promise<void> 
   const totalRevenue = parseFloat(String(revenueResult[0]?.total ?? 0)) || 0;
 
   res.json({
-    totalLoads: loadsResult[0]?.total ?? 0,
+    totalLoads: loadsResult?.total ?? 0,
     activeLoads: (activeLoads[0]?.total ?? 0) + (assignedLoads[0]?.total ?? 0),
-    totalTrucks: trucksResult[0]?.total ?? 0,
+    totalTrucks: trucksResult?.total ?? 0,
     availableTrucks: availableTrucks[0]?.total ?? 0,
-    totalDrivers: driversResult[0]?.total ?? 0,
+    totalDrivers: driversResult?.total ?? 0,
     activeDrivers: activeTrucks[0]?.total ?? 0,
     totalRevenue,
     monthlyRevenue: totalRevenue * 0.12,
