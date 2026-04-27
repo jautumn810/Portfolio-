@@ -13,13 +13,14 @@ import {
   ChevronLeft
 } from "lucide-react";
 import { useAuth } from "@/lib/auth";
-import { useRealtimeSync } from "@/lib/realtime";
+import { useRealtimeSync, requestNotificationPermission, getNotificationPermission, type NotificationPermission as NotifPerm } from "@/lib/realtime";
+import { useToast } from "@/hooks/use-toast";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { FloatingChatbot } from "./floating-chatbot";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 
 interface LayoutProps {
@@ -30,7 +31,40 @@ export function Layout({ children }: LayoutProps) {
   const { user, logout } = useAuth();
   const [location, setLocation] = useLocation();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const { toast } = useToast();
+  const [notifPerm, setNotifPerm] = useState<NotifPerm>("default");
   useRealtimeSync();
+
+  useEffect(() => {
+    setNotifPerm(getNotificationPermission());
+  }, []);
+
+  const handleBellClick = async () => {
+    const current = getNotificationPermission();
+    if (current === "unsupported") {
+      toast({ title: "Notifications not supported", description: "Your browser does not support desktop notifications." });
+      return;
+    }
+    if (current === "denied") {
+      toast({
+        title: "Notifications blocked",
+        description: "Enable notifications for this site in your browser settings.",
+        variant: "destructive",
+      });
+      return;
+    }
+    if (current === "granted") {
+      toast({ title: "Notifications enabled", description: "You'll get desktop alerts for new bids and bid status changes." });
+      return;
+    }
+    const result = await requestNotificationPermission();
+    setNotifPerm(result);
+    if (result === "granted") {
+      toast({ title: "Notifications enabled", description: "You'll get desktop alerts for new bids and bid status changes." });
+    } else if (result === "denied") {
+      toast({ title: "Notifications blocked", description: "You can enable them later in browser settings.", variant: "destructive" });
+    }
+  };
 
   if (!user) {
     return <>{children}</>;
@@ -178,9 +212,31 @@ export function Layout({ children }: LayoutProps) {
           </div>
 
           <div className="flex items-center gap-4">
-            <Button variant="ghost" size="icon" className="relative text-muted-foreground hover:text-foreground">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="relative text-muted-foreground hover:text-foreground"
+              onClick={handleBellClick}
+              title={
+                notifPerm === "granted"
+                  ? "Desktop notifications enabled"
+                  : notifPerm === "denied"
+                  ? "Notifications blocked — enable in browser settings"
+                  : "Click to enable desktop notifications"
+              }
+              data-testid="button-notifications"
+            >
               <Bell size={20} />
-              <span className="absolute top-2 right-2.5 w-2 h-2 bg-primary rounded-full ring-2 ring-card" />
+              <span
+                className={cn(
+                  "absolute top-2 right-2.5 w-2 h-2 rounded-full ring-2 ring-card",
+                  notifPerm === "granted"
+                    ? "bg-green-500"
+                    : notifPerm === "denied"
+                    ? "bg-muted-foreground"
+                    : "bg-primary animate-pulse",
+                )}
+              />
             </Button>
             
             <div className="flex items-center gap-3 pl-4 border-l border-border">
