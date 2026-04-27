@@ -13,6 +13,7 @@ import {
   ChevronLeft
 } from "lucide-react";
 import { useAuth } from "@/lib/auth";
+import { useRealtimeSync } from "@/lib/realtime";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -29,6 +30,7 @@ export function Layout({ children }: LayoutProps) {
   const { user, logout } = useAuth();
   const [location, setLocation] = useLocation();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  useRealtimeSync();
 
   if (!user) {
     return <>{children}</>;

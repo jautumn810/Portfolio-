@@ -1,9 +1,10 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Truck, MapPin, Activity } from "lucide-react";
 import { useGetTruckTelematics, useListTrucks, useListLoads } from "@workspace/api-client-react";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
+import { subscribeTruckPositions, type TruckPosition } from "@/lib/realtime";
 
 // Dynamic import for leaflet to avoid SSR issues
 import { MapContainer, TileLayer, Marker, Popup, Polyline } from "react-leaflet";
@@ -49,8 +50,22 @@ export default function MapPage() {
   const activeTrucks = trucks?.filter((t) => t.currentLat && t.currentLng) ?? [];
   const activeLoads = loads?.filter((l) => l.originLat && l.destLat) ?? [];
 
-  // Fallback truck positions using telematics
-  const truckPositions = telematics ?? activeTrucks.map((t) => ({
+  // Live overrides from socket events
+  const [liveOverrides, setLiveOverrides] = useState<Record<number, TruckPosition>>({});
+
+  useEffect(() => {
+    const unsub = subscribeTruckPositions((positions) => {
+      setLiveOverrides((prev) => {
+        const next = { ...prev };
+        for (const p of positions) next[p.id] = p;
+        return next;
+      });
+    });
+    return unsub;
+  }, []);
+
+  // Fallback truck positions using telematics, then apply live overrides
+  const basePositions = telematics ?? activeTrucks.map((t) => ({
     truckId: t.id,
     lat: t.currentLat ?? 39.5 + Math.random() * 10,
     lng: t.currentLng ?? -98 + Math.random() * 20,
@@ -61,6 +76,11 @@ export default function MapPage() {
     status: t.status,
     lastUpdated: new Date().toISOString(),
   }));
+
+  const truckPositions = basePositions.map((t) => {
+    const live = liveOverrides[t.truckId];
+    return live ? { ...t, lat: live.lat, lng: live.lng, speed: live.speed } : t;
+  });
 
   return (
     <div className="space-y-4 h-full">

@@ -10,6 +10,7 @@ import {
   GetLoadBidsParams,
 } from "@workspace/api-zod";
 import { requireAuth } from "../lib/auth";
+import { emitEvent } from "../lib/socket";
 
 const router: IRouter = Router();
 
@@ -87,6 +88,8 @@ router.post("/bids", requireAuth, async (req, res): Promise<void> => {
 
   const enriched = await enrichBid(bid);
   req.log.info({ bidId: bid.id }, "Bid created");
+  emitEvent("bid:created", enriched);
+  emitEvent("load:updated", { id: parsed.data.loadId });
   res.status(201).json(enriched);
 });
 
@@ -129,6 +132,8 @@ router.patch("/bids/:id", requireAuth, async (req, res): Promise<void> => {
 
   const enriched = await enrichBid(bid);
   req.log.info({ bidId: bid.id, status: parsed.data.status }, "Bid updated");
+  emitEvent("bid:updated", enriched);
+  emitEvent("load:updated", { id: bid.loadId });
   res.json(enriched);
 });
 
