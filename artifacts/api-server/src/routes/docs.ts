@@ -16,6 +16,18 @@ router.get("/docs/spec.json", (_req, res) => {
 // Self-contained Swagger UI page — loads assets from CDN, no static file serving needed
 router.get("/docs", (_req, res) => {
   res.setHeader("Content-Type", "text/html");
+  // Relax CSP for this developer tool page only
+  res.setHeader(
+    "Content-Security-Policy",
+    [
+      "default-src 'self'",
+      "script-src 'self' cdn.jsdelivr.net 'unsafe-inline'",
+      "style-src 'self' 'unsafe-inline' cdn.jsdelivr.net",
+      "img-src 'self' data: https:",
+      "connect-src 'self'",
+      "font-src 'self' cdn.jsdelivr.net",
+    ].join("; "),
+  );
   res.send(`<!DOCTYPE html>
 <html lang="en">
 <head>
