@@ -37,11 +37,17 @@ router.get("/loads", requireAuth, async (req, res): Promise<void> => {
   res.json(enriched);
 });
 
-// POST /loads
+// POST /loads — only shippers and admins
 router.post("/loads", requireAuth, async (req, res): Promise<void> => {
+  const role = req.user!.role;
+  if (role !== "shipper" && role !== "admin" && role !== "dispatcher") {
+    res.status(403).json({ error: "Forbidden" });
+    return;
+  }
+
   const parsed = CreateLoadBody.safeParse(req.body);
   if (!parsed.success) {
-    res.status(400).json({ error: parsed.error.message });
+    res.status(400).json({ error: "Invalid request body" });
     return;
   }
 
@@ -61,7 +67,7 @@ router.post("/loads", requireAuth, async (req, res): Promise<void> => {
 router.get("/loads/:id", requireAuth, async (req, res): Promise<void> => {
   const params = GetLoadParams.safeParse(req.params);
   if (!params.success) {
-    res.status(400).json({ error: params.error.message });
+    res.status(400).json({ error: "Invalid load ID" });
     return;
   }
 
@@ -75,41 +81,64 @@ router.get("/loads/:id", requireAuth, async (req, res): Promise<void> => {
   res.json(enriched);
 });
 
-// PATCH /loads/:id
+// PATCH /loads/:id — only load's shipper, dispatcher, or admin
 router.patch("/loads/:id", requireAuth, async (req, res): Promise<void> => {
-  const raw = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
-  const id = parseInt(raw, 10);
-
-  const parsed = UpdateLoadBody.safeParse(req.body);
-  if (!parsed.success) {
-    res.status(400).json({ error: parsed.error.message });
+  const params = GetLoadParams.safeParse(req.params);
+  if (!params.success) {
+    res.status(400).json({ error: "Invalid load ID" });
     return;
   }
 
-  const [load] = await db.update(loadsTable).set(parsed.data).where(eq(loadsTable.id, id)).returning();
-  if (!load) {
+  const [existing] = await db.select().from(loadsTable).where(eq(loadsTable.id, params.data.id));
+  if (!existing) {
     res.status(404).json({ error: "Load not found" });
     return;
   }
+
+  const role = req.user!.role;
+  const isOwner = existing.shipperId === req.user!.id;
+  if (!isOwner && role !== "admin" && role !== "dispatcher") {
+    res.status(403).json({ error: "Forbidden" });
+    return;
+  }
+
+  const parsed = UpdateLoadBody.safeParse(req.body);
+  if (!parsed.success) {
+    res.status(400).json({ error: "Invalid request body" });
+    return;
+  }
+
+  const [load] = await db
+    .update(loadsTable)
+    .set(parsed.data)
+    .where(eq(loadsTable.id, params.data.id))
+    .returning();
 
   const enriched = await enrichLoad(load);
   res.json(enriched);
 });
 
-// DELETE /loads/:id
+// DELETE /loads/:id — only load's shipper or admin
 router.delete("/loads/:id", requireAuth, async (req, res): Promise<void> => {
   const params = DeleteLoadParams.safeParse(req.params);
   if (!params.success) {
-    res.status(400).json({ error: params.error.message });
+    res.status(400).json({ error: "Invalid load ID" });
     return;
   }
 
-  const [load] = await db.delete(loadsTable).where(eq(loadsTable.id, params.data.id)).returning();
-  if (!load) {
+  const [existing] = await db.select().from(loadsTable).where(eq(loadsTable.id, params.data.id));
+  if (!existing) {
     res.status(404).json({ error: "Load not found" });
     return;
   }
 
+  const isOwner = existing.shipperId === req.user!.id;
+  if (!isOwner && req.user!.role !== "admin") {
+    res.status(403).json({ error: "Forbidden" });
+    return;
+  }
+
+  await db.delete(loadsTable).where(eq(loadsTable.id, params.data.id));
   res.sendStatus(204);
 });
 

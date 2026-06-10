@@ -59,6 +59,15 @@ export async function requestNotificationPermission(): Promise<NotificationPermi
   return result as NotificationPermission;
 }
 
+function isSafeInternalPath(url: string): boolean {
+  try {
+    const parsed = new URL(url, window.location.origin);
+    return parsed.origin === window.location.origin;
+  } catch {
+    return false;
+  }
+}
+
 function showDesktopNotification(
   title: string,
   options: NotificationOptions & { url?: string },
@@ -72,7 +81,7 @@ function showDesktopNotification(
   });
   n.onclick = () => {
     window.focus();
-    if (url) {
+    if (url && isSafeInternalPath(url)) {
       window.location.href = url;
     }
     n.close();

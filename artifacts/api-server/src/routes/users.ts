@@ -17,7 +17,7 @@ router.get("/users", requireAuth, async (req, res): Promise<void> => {
 router.get("/users/:id", requireAuth, async (req, res): Promise<void> => {
   const params = GetUserParams.safeParse(req.params);
   if (!params.success) {
-    res.status(400).json({ error: params.error.message });
+    res.status(400).json({ error: "Invalid user ID" });
     return;
   }
 
@@ -31,18 +31,32 @@ router.get("/users/:id", requireAuth, async (req, res): Promise<void> => {
   res.json(safeUser);
 });
 
-// PATCH /users/:id
+// PATCH /users/:id — only own profile or admin
 router.patch("/users/:id", requireAuth, async (req, res): Promise<void> => {
-  const raw = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
-  const id = parseInt(raw, 10);
-
-  const parsed = UpdateUserBody.safeParse(req.body);
-  if (!parsed.success) {
-    res.status(400).json({ error: parsed.error.message });
+  const params = GetUserParams.safeParse(req.params);
+  if (!params.success) {
+    res.status(400).json({ error: "Invalid user ID" });
     return;
   }
 
-  const [user] = await db.update(usersTable).set(parsed.data).where(eq(usersTable.id, id)).returning();
+  const targetId = params.data.id;
+  const isAdmin = req.user!.role === "admin";
+  if (!isAdmin && req.user!.id !== targetId) {
+    res.status(403).json({ error: "Forbidden" });
+    return;
+  }
+
+  const parsed = UpdateUserBody.safeParse(req.body);
+  if (!parsed.success) {
+    res.status(400).json({ error: "Invalid request body" });
+    return;
+  }
+
+  const [user] = await db
+    .update(usersTable)
+    .set(parsed.data)
+    .where(eq(usersTable.id, targetId))
+    .returning();
   if (!user) {
     res.status(404).json({ error: "User not found" });
     return;

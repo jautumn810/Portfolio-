@@ -19,16 +19,37 @@ L.Icon.Default.mergeOptions({
   shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png",
 });
 
+const TRUCK_STATUS_COLORS: Record<string, string> = {
+  in_transit: "#3b82f6",
+  available: "#22c55e",
+  maintenance: "#f59e0b",
+  inactive: "#6b7280",
+};
+
 function createTruckIcon(status: string) {
-  const color = status === "in_transit" ? "#3b82f6" : status === "available" ? "#22c55e" : "#f59e0b";
-  return L.divIcon({
-    className: "",
-    html: `<div style="background:${color};width:32px;height:32px;border-radius:50%;border:3px solid white;box-shadow:0 2px 8px rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;">
-      <svg width="16" height="16" fill="white" viewBox="0 0 24 24"><path d="M18 18.5a1.5 1.5 0 010 3 1.5 1.5 0 010-3M1.5 18.5a1.5 1.5 0 010 3 1.5 1.5 0 010-3M19.5 9.5l1.5 3-1.5 3H18V9.5h1.5M6 9.5V16H3.5C2.1 16 1 14.9 1 13.5V12l2.5-2.5H6M18 3H7C5.3 3 4 4.3 4 6v2H8l2-4h6.5c1.1 0 2 .9 2 2v10h-2"/></svg>
-    </div>`,
-    iconSize: [32, 32],
-    iconAnchor: [16, 16],
-  });
+  const color = TRUCK_STATUS_COLORS[status] ?? TRUCK_STATUS_COLORS["inactive"];
+  const div = document.createElement("div");
+  div.style.cssText = [
+    `background:${color}`,
+    "width:32px",
+    "height:32px",
+    "border-radius:50%",
+    "border:3px solid white",
+    "box-shadow:0 2px 8px rgba(0,0,0,0.5)",
+    "display:flex",
+    "align-items:center",
+    "justify-content:center",
+  ].join(";");
+  const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  svg.setAttribute("width", "16");
+  svg.setAttribute("height", "16");
+  svg.setAttribute("fill", "white");
+  svg.setAttribute("viewBox", "0 0 24 24");
+  const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+  path.setAttribute("d", "M18 18.5a1.5 1.5 0 010 3 1.5 1.5 0 010-3M1.5 18.5a1.5 1.5 0 010 3 1.5 1.5 0 010-3M19.5 9.5l1.5 3-1.5 3H18V9.5h1.5M6 9.5V16H3.5C2.1 16 1 14.9 1 13.5V12l2.5-2.5H6M18 3H7C5.3 3 4 4.3 4 6v2H8l2-4h6.5c1.1 0 2 .9 2 2v10h-2");
+  svg.appendChild(path);
+  div.appendChild(svg);
+  return L.divIcon({ className: "", html: div, iconSize: [32, 32], iconAnchor: [16, 16] });
 }
 
 function createLoadIcon() {
