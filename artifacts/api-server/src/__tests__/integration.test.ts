@@ -18,14 +18,16 @@ async function post(path: string, body: unknown, token?: string) {
     },
     body: JSON.stringify(body),
   });
-  return { status: res.status, body: await res.json().catch(() => null) };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return { status: res.status, body: (await res.json().catch(() => null)) as any };
 }
 
 async function get(path: string, token?: string) {
   const res = await fetch(`${BASE}${path}`, {
     headers: token ? { Authorization: `Bearer ${token}` } : {},
   });
-  return { status: res.status, body: await res.json().catch(() => null) };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return { status: res.status, body: (await res.json().catch(() => null)) as any };
 }
 
 async function patch(path: string, body: unknown, token: string) {
@@ -34,7 +36,8 @@ async function patch(path: string, body: unknown, token: string) {
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
     body: JSON.stringify(body),
   });
-  return { status: res.status, body: await res.json().catch(() => null) };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return { status: res.status, body: (await res.json().catch(() => null)) as any };
 }
 
 async function del(path: string, token: string) {
