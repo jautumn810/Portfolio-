@@ -26,6 +26,18 @@ httpServer.listen(port, () => {
   logger.info({ port }, "Server listening (http+socket.io)");
 });
 
+// One-time fix: update broken Volvo VNL 760 image URL
+(async () => {
+  try {
+    const BROKEN = "https://rockwoodtruckcentre.com/wp-content/uploads/2025/08/WhatsApp-Image-2025-08-08-at-11.34.20-AM.jpeg";
+    const FIXED  = "https://orion.soarr.com/photos/16454262/300x/2023-volvo-vnl+760.1.jpg";
+    await db.update(trucksTable).set({ imageUrl: FIXED }).where(eq(trucksTable.imageUrl, BROKEN));
+    logger.info("Volvo VNL 760 image URL patched");
+  } catch (err) {
+    logger.error({ err }, "Image URL patch failed (non-fatal)");
+  }
+})();
+
 // Simulate truck movement for in-transit trucks every 5 seconds
 const TRUCK_TICK_MS = 5000;
 setInterval(async () => {
