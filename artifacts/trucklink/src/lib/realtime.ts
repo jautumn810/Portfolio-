@@ -8,7 +8,8 @@ let socket: Socket | null = null;
 
 export function getSocket(): Socket {
   if (!socket) {
-    socket = io({
+    const apiUrl = import.meta.env.VITE_API_URL as string | undefined;
+    socket = io(apiUrl ?? "", {
       path: "/api/socket.io",
       transports: ["websocket", "polling"],
       autoConnect: true,

@@ -1,0 +1,149 @@
+WebSocket connection to 'wss://portfolio-trucklink-brkz-9r1nh332c-autumn-renee-jones-projects.vercel.app/api/socket.io/?EIO=4&transport=websocket' failed: Error during WebSocket handshake: Unexpected response code: 200
+createSocket @ index-CA2SqbVF.js:9
+index-CA2SqbVF.js:9 WebSocket connection to 'wss://portfolio-trucklink-brkz-9r1nh332c-autumn-renee-jones-projects.vercel.app/api/socket.io/?EIO=4&transport=websocket' failed: Error during WebSocket handshake: Unexpected response code: 200
+createSocket @ index-CA2SqbVF.js:9
+index-CA2SqbVF.js:9 WebSocket connection to 'wss://portfolio-trucklink-brkz-9r1nh332c-autumn-renee-jones-projects.vercel.app/api/socket.io/?EIO=4&transport=websocket' failed: Error during WebSocket handshake: Unexpected response code: 200
+createSocket @ index-CA2SqbVF.js:9
+index-CA2SqbVF.js:9 WebSocket connection to 'wss://portfolio-trucklink-brkz-9r1nh332c-autumn-renee-jones-projects.vercel.app/api/socket.io/?EIO=4&transport=websocket' failed: Error during WebSocket handshake: Unexpected response code: 200
+createSocket @ index-CA2SqbVF.js:9
+index-CA2SqbVF.js:9 WebSocket connection to 'wss://portfolio-trucklink-brkz-9r1nh332c-autumn-renee-jones-projects.vercel.app/api/socket.io/?EIO=4&transport=websocket' failed: Error during WebSocket handshake: Unexpected response code: 200
+createSocket @ index-CA2SqbVF.js:9
+index-CA2SqbVF.js:9 WebSocket connection to 'wss://portfolio-trucklink-brkz-9r1nh332c-autumn-renee-jones-projects.vercel.app/api/socket.io/?EIO=4&transport=websocket' failed: Error during WebSocket handshake: Unexpected response code: 200
+createSocket @ index-CA2SqbVF.js:9
+index-CA2SqbVF.js:9 WebSocket connection to 'wss://portfolio-trucklink-brkz-9r1nh332c-autumn-renee-jones-projects.vercel.app/api/socket.io/?EIO=4&transport=websocket' failed: Error during WebSocket handshake: Unexpected response code: 200
+createSocket @ index-CA2SqbVF.js:9
+index-CA2SqbVF.js:9 WebSocket connection to 'wss://portfolio-trucklink-brkz-9r1nh332c-autumn-renee-jones-projects.vercel.app/api/socket.io/?EIO=4&transport=websocket' failed: Error during WebSocket handshake: Unexpected response code: 200
+createSocket @ index-CA2SqbVF.js:9
+index-CA2SqbVF.js:9 WebSocket connection to 'wss://portfolio-trucklink-brkz-9r1nh332c-autumn-renee-jones-projects.vercel.app/api/socket.io/?EIO=4&transport=websocket' failed: Error during WebSocket handshake: Unexpected response code: 200
+createSocket @ index-CA2SqbVF.js:9
+index-CA2SqbVF.js:9 WebSocket connection to 'wss://portfolio-trucklink-brkz-9r1nh332c-autumn-renee-jones-projects.vercel.app/api/socket.io/?EIO=4&transport=websocket' failed: Error during WebSocket handshake: Unexpected response code: 200
+createSocket @ index-CA2SqbVF.js:9
+index-CA2SqbVF.js:9 WebSocket connection to 'wss://portfolio-trucklink-brkz-9r1nh332c-autumn-renee-jones-projects.vercel.app/api/socket.io/?EIO=4&transport=websocket' failed: Error during WebSocket handshake: Unexpected response code: 200
+createSocket @ index-CA2SqbVF.js:9
+index-CA2SqbVF.js:9 WebSocket connection to 'wss://portfolio-trucklink-brkz-9r1nh332c-autumn-renee-jones-projects.vercel.app/api/socket.io/?EIO=4&transport=websocket' failed: Error during WebSocket handshake: Unexpected response code: 200
+createSocket @ index-CA2SqbVF.js:9
+index-CA2SqbVF.js:9 WebSocket connection to 'wss://portfolio-trucklink-brkz-9r1nh332c-autumn-renee-jones-projects.vercel.app/api/socket.io/?EIO=4&transport=websocket' failed: Error during WebSocket handshake: Unexpected response code: 200
+createSocket @ index-CA2SqbVF.js:9
+index-CA2SqbVF.js:9 WebSocket connection to 'wss://portfolio-trucklink-brkz-9r1nh332c-autumn-renee-jones-projects.vercel.app/api/socket.io/?EIO=4&transport=websocket' failed: Error during WebSocket handshake: Unexpected response code: 200
+createSocket @ index-CA2SqbVF.js:9
+index-CA2SqbVF.js:9 WebSocket connection to 'wss://portfolio-trucklink-brkz-9r1nh332c-autumn-renee-jones-projects.vercel.app/api/socket.io/?EIO=4&transport=websocket' failed: Error during WebSocket handshake: Unexpected response code: 200
+createSocket @ index-CA2SqbVF.js:9
+index-CA2SqbVF.js:9 WebSocket connection to 'wss://portfolio-trucklink-brkz-9r1nh332c-autumn-renee-jones-projects.vercel.app/api/socket.io/?EIO=4&transport=websocket' failed: Error during WebSocket handshake: Unexpected response code: 200
+createSocket @ index-CA2SqbVF.js:9
+index-CA2SqbVF.js:9 WebSocket connection to 'wss://portfolio-trucklink-brkz-9r1nh332c-autumn-renee-jones-projects.vercel.app/api/socket.io/?EIO=4&transport=websocket' failed: Error during WebSocket handshake: Unexpected response code: 200
+createSocket @ index-CA2SqbVF.js:9
+index-CA2SqbVF.js:9 WebSocket connection to 'wss://portfolio-trucklink-brkz-9r1nh332c-autumn-renee-jones-projects.vercel.app/api/socket.io/?EIO=4&transport=websocket' failed: Error during WebSocket handshake: Unexpected response code: 200
+createSocket @ index-CA2SqbVF.js:9
+index-CA2SqbVF.js:9 WebSocket connection to 'wss://portfolio-trucklink-brkz-9r1nh332c-autumn-renee-jones-projects.vercel.app/api/socket.io/?EIO=4&transport=websocket' failed: Error during WebSocket handshake: Unexpected response code: 200
+createSocket @ index-CA2SqbVF.js:9
+index-CA2SqbVF.js:9 WebSocket connection to 'wss://portfolio-trucklink-brkz-9r1nh332c-autumn-renee-jones-projects.vercel.app/api/socket.io/?EIO=4&transport=websocket' failed: Error during WebSocket handshake: Unexpected response code: 200
+createSocket @ index-CA2SqbVF.js:9
+index-CA2SqbVF.js:9 WebSocket connection to 'wss://portfolio-trucklink-brkz-9r1nh332c-autumn-renee-jones-projects.vercel.app/api/socket.io/?EIO=4&transport=websocket' failed: Error during WebSocket handshake: Unexpected response code: 200
+createSocket @ index-CA2SqbVF.js:9
+index-CA2SqbVF.js:9 WebSocket connection to 'wss://portfolio-trucklink-brkz-9r1nh332c-autumn-renee-jones-projects.vercel.app/api/socket.io/?EIO=4&transport=websocket' failed: Error during WebSocket handshake: Unexpected response code: 200
+createSocket @ index-CA2SqbVF.js:9
+index-CA2SqbVF.js:9 WebSocket connection to 'wss://portfolio-trucklink-brkz-9r1nh332c-autumn-renee-jones-projects.vercel.app/api/socket.io/?EIO=4&transport=websocket' failed: Error during WebSocket handshake: Unexpected response code: 200
+createSocket @ index-CA2SqbVF.js:9
+index-CA2SqbVF.js:9 WebSocket connection to 'wss://portfolio-trucklink-brkz-9r1nh332c-autumn-renee-jones-projects.vercel.app/api/socket.io/?EIO=4&transport=websocket' failed: Error during WebSocket handshake: Unexpected response code: 200
+createSocket @ index-CA2SqbVF.js:9
+index-CA2SqbVF.js:9 WebSocket connection to 'wss://portfolio-trucklink-brkz-9r1nh332c-autumn-renee-jones-projects.vercel.app/api/socket.io/?EIO=4&transport=websocket' failed: Error during WebSocket handshake: Unexpected response code: 200
+createSocket @ index-CA2SqbVF.js:9
+index-CA2SqbVF.js:9 WebSocket connection to 'wss://portfolio-trucklink-brkz-9r1nh332c-autumn-renee-jones-projects.vercel.app/api/socket.io/?EIO=4&transport=websocket' failed: Error during WebSocket handshake: Unexpected response code: 200
+createSocket @ index-CA2SqbVF.js:9
+index-CA2SqbVF.js:9 WebSocket connection to 'wss://portfolio-trucklink-brkz-9r1nh332c-autumn-renee-jones-projects.vercel.app/api/socket.io/?EIO=4&transport=websocket' failed: Error during WebSocket handshake: Unexpected response code: 200
+createSocket @ index-CA2SqbVF.js:9
+index-CA2SqbVF.js:9 WebSocket connection to 'wss://portfolio-trucklink-brkz-9r1nh332c-autumn-renee-jones-projects.vercel.app/api/socket.io/?EIO=4&transport=websocket' failed: Error during WebSocket handshake: Unexpected response code: 200
+createSocket @ index-CA2SqbVF.js:9
+index-CA2SqbVF.js:9 WebSocket connection to 'wss://portfolio-trucklink-brkz-9r1nh332c-autumn-renee-jones-projects.vercel.app/api/socket.io/?EIO=4&transport=websocket' failed: Error during WebSocket handshake: Unexpected response code: 200
+createSocket @ index-CA2SqbVF.js:9
+[NEW] Explain Console errors by using Copilot in Edge: click  to explain an error. Learn moreDon't show again
+index-CA2SqbVF.js:9 WebSocket connection to 'wss://portfolio-trucklink-brkz-9r1nh332c-autumn-renee-jones-projects.vercel.app/api/socket.io/?EIO=4&transport=websocket' failed: Error during WebSocket handshake: Unexpected response code: 200
+createSocket @ index-CA2SqbVF.js:9
+doOpen @ index-CA2SqbVF.js:9
+open @ index-CA2SqbVF.js:9
+_open @ index-CA2SqbVF.js:9
+Ts @ index-CA2SqbVF.js:9
+pJ @ index-CA2SqbVF.js:9
+mJ @ index-CA2SqbVF.js:9
+open @ index-CA2SqbVF.js:9
+(anonymous) @ index-CA2SqbVF.js:9
+index-CA2SqbVF.js:9 WebSocket connection to 'wss://portfolio-trucklink-brkz-9r1nh332c-autumn-renee-jones-projects.vercel.app/api/socket.io/?EIO=4&transport=websocket' failed: Error during WebSocket handshake: Unexpected response code: 200
+createSocket @ index-CA2SqbVF.js:9
+doOpen @ index-CA2SqbVF.js:9
+open @ index-CA2SqbVF.js:9
+_open @ index-CA2SqbVF.js:9
+Ts @ index-CA2SqbVF.js:9
+pJ @ index-CA2SqbVF.js:9
+mJ @ index-CA2SqbVF.js:9
+open @ index-CA2SqbVF.js:9
+(anonymous) @ index-CA2SqbVF.js:9
+index-CA2SqbVF.js:9 WebSocket connection to 'wss://portfolio-trucklink-brkz-9r1nh332c-autumn-renee-jones-projects.vercel.app/api/socket.io/?EIO=4&transport=websocket' failed: Error during WebSocket handshake: Unexpected response code: 200
+createSocket @ index-CA2SqbVF.js:9
+doOpen @ index-CA2SqbVF.js:9
+open @ index-CA2SqbVF.js:9
+_open @ index-CA2SqbVF.js:9
+Ts @ index-CA2SqbVF.js:9
+pJ @ index-CA2SqbVF.js:9
+mJ @ index-CA2SqbVF.js:9
+open @ index-CA2SqbVF.js:9
+(anonymous) @ index-CA2SqbVF.js:9
+index-CA2SqbVF.js:9 WebSocket connection to 'wss://portfolio-trucklink-brkz-9r1nh332c-autumn-renee-jones-projects.vercel.app/api/socket.io/?EIO=4&transport=websocket' failed: Error during WebSocket handshake: Unexpected response code: 200
+createSocket @ index-CA2SqbVF.js:9
+doOpen @ index-CA2SqbVF.js:9
+open @ index-CA2SqbVF.js:9
+_open @ index-CA2SqbVF.js:9
+Ts @ index-CA2SqbVF.js:9
+pJ @ index-CA2SqbVF.js:9
+mJ @ index-CA2SqbVF.js:9
+open @ index-CA2SqbVF.js:9
+(anonymous) @ index-CA2SqbVF.js:9
+index-CA2SqbVF.js:9 WebSocket connection to 'wss://portfolio-trucklink-brkz-9r1nh332c-autumn-renee-jones-projects.vercel.app/api/socket.io/?EIO=4&transport=websocket' failed: Error during WebSocket handshake: Unexpected response code: 200
+createSocket @ index-CA2SqbVF.js:9
+doOpen @ index-CA2SqbVF.js:9
+open @ index-CA2SqbVF.js:9
+_open @ index-CA2SqbVF.js:9
+Ts @ index-CA2SqbVF.js:9
+pJ @ index-CA2SqbVF.js:9
+mJ @ index-CA2SqbVF.js:9
+open @ index-CA2SqbVF.js:9
+(anonymous) @ index-CA2SqbVF.js:9
+index-CA2SqbVF.js:9 WebSocket connection to 'wss://portfolio-trucklink-brkz-9r1nh332c-autumn-renee-jones-projects.vercel.app/api/socket.io/?EIO=4&transport=websocket' failed: Error during WebSocket handshake: Unexpected response code: 200
+createSocket @ index-CA2SqbVF.js:9
+doOpen @ index-CA2SqbVF.js:9
+open @ index-CA2SqbVF.js:9
+_open @ index-CA2SqbVF.js:9
+Ts @ index-CA2SqbVF.js:9
+pJ @ index-CA2SqbVF.js:9
+mJ @ index-CA2SqbVF.js:9
+open @ index-CA2SqbVF.js:9
+(anonymous) @ index-CA2SqbVF.js:9
+index-CA2SqbVF.js:9 WebSocket connection to 'wss://portfolio-trucklink-brkz-9r1nh332c-autumn-renee-jones-projects.vercel.app/api/socket.io/?EIO=4&transport=websocket' failed: Error during WebSocket handshake: Unexpected response code: 200
+createSocket @ index-CA2SqbVF.js:9
+doOpen @ index-CA2SqbVF.js:9
+open @ index-CA2SqbVF.js:9
+_open @ index-CA2SqbVF.js:9
+Ts @ index-CA2SqbVF.js:9
+pJ @ index-CA2SqbVF.js:9
+mJ @ index-CA2SqbVF.js:9
+open @ index-CA2SqbVF.js:9
+(anonymous) @ index-CA2SqbVF.js:9
+index-CA2SqbVF.js:9 WebSocket connection to 'wss://portfolio-trucklink-brkz-9r1nh332c-autumn-renee-jones-projects.vercel.app/api/socket.io/?EIO=4&transport=websocket' failed: Error during WebSocket handshake: Unexpected response code: 200
+createSocket @ index-CA2SqbVF.js:9
+doOpen @ index-CA2SqbVF.js:9
+open @ index-CA2SqbVF.js:9
+_open @ index-CA2SqbVF.js:9
+Ts @ index-CA2SqbVF.js:9
+pJ @ index-CA2SqbVF.js:9
+mJ @ index-CA2SqbVF.js:9
+open @ index-CA2SqbVF.js:9
+(anonymous) @ index-CA2SqbVF.js:9
+index-CA2SqbVF.js:9 WebSocket connection to 'wss://portfolio-trucklink-brkz-9r1nh332c-autumn-renee-jones-projects.vercel.app/api/socket.io/?EIO=4&transport=websocket' failed: Error during WebSocket handshake: Unexpected response code: 200
+createSocket @ index-CA2SqbVF.js:9
+doOpen @ index-CA2SqbVF.js:9
+open @ index-CA2SqbVF.js:9
+_open @ index-CA2SqbVF.js:9
+Ts @ index-CA2SqbVF.js:9
+pJ @ index-CA2SqbVF.js:9
+mJ @ index-CA2SqbVF.js:9
+open @ index-CA2SqbVF.js:9
+(anonymous) @ index-CA2SqbVF.js:9
