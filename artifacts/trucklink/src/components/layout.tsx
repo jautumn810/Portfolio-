@@ -31,6 +31,7 @@ export function Layout({ children }: LayoutProps) {
   const { user, logout } = useAuth();
   const [location, setLocation] = useLocation();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isMobileOpen, setIsMobileOpen] = useState(false);
   const { toast } = useToast();
   const [notifPerm, setNotifPerm] = useState<NotifPerm>("default");
   useRealtimeSync();
@@ -191,12 +192,98 @@ export function Layout({ children }: LayoutProps) {
         </div>
       </motion.aside>
 
+      {/* Mobile drawer backdrop */}
+      <AnimatePresence>
+        {isMobileOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/60 z-40 md:hidden"
+            onClick={() => setIsMobileOpen(false)}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Mobile drawer */}
+      <AnimatePresence>
+        {isMobileOpen && (
+          <motion.aside
+            initial={{ x: -280 }}
+            animate={{ x: 0 }}
+            exit={{ x: -280 }}
+            transition={{ type: "spring", damping: 30, stiffness: 300 }}
+            className="fixed top-0 left-0 h-full w-64 bg-sidebar border-r border-sidebar-border z-50 flex flex-col md:hidden"
+          >
+            <div className="h-16 flex items-center justify-between px-4 border-b border-sidebar-border">
+              <div className="flex items-center gap-2 text-primary">
+                <Truck size={22} />
+                <span className="font-bold text-lg text-white">TruckLink</span>
+              </div>
+              <Button variant="ghost" size="icon" onClick={() => setIsMobileOpen(false)} className="text-muted-foreground">
+                <ChevronLeft size={18} />
+              </Button>
+            </div>
+
+            <nav className="flex-1 py-6 flex flex-col gap-1 px-3">
+              {navItems.map((item) => {
+                const isActive = location === item.href || location.startsWith(`${item.href}/`);
+                return (
+                  <Link key={item.href} href={item.href}>
+                    <div
+                      onClick={() => setIsMobileOpen(false)}
+                      className={cn(
+                        "flex items-center gap-3 px-3 py-3 rounded-md cursor-pointer transition-colors relative overflow-hidden",
+                        isActive
+                          ? "bg-primary/10 text-primary font-medium"
+                          : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground"
+                      )}
+                    >
+                      {isActive && (
+                        <div className="absolute left-0 top-0 bottom-0 w-1 bg-primary rounded-r" />
+                      )}
+                      <item.icon size={20} className="shrink-0" />
+                      <span>{item.label}</span>
+                    </div>
+                  </Link>
+                );
+              })}
+            </nav>
+
+            <div className="p-3 border-t border-sidebar-border">
+              <Link href="/profile">
+                <div
+                  onClick={() => setIsMobileOpen(false)}
+                  className={cn(
+                    "flex items-center gap-3 px-3 py-2.5 rounded-md cursor-pointer transition-colors",
+                    location === "/profile"
+                      ? "bg-sidebar-accent text-sidebar-foreground"
+                      : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground"
+                  )}
+                >
+                  <Avatar className="h-8 w-8 shrink-0 border border-sidebar-border">
+                    <AvatarImage src={user.avatarUrl || undefined} />
+                    <AvatarFallback className="bg-primary/20 text-primary text-xs">
+                      {user.name.charAt(0)}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="overflow-hidden">
+                    <p className="text-sm font-medium text-sidebar-foreground truncate">{user.name}</p>
+                    <p className="text-xs text-sidebar-foreground/50 capitalize">{user.role}</p>
+                  </div>
+                </div>
+              </Link>
+            </div>
+          </motion.aside>
+        )}
+      </AnimatePresence>
+
       {/* Main Content */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden bg-background relative z-10">
         {/* Header */}
         <header className="h-16 border-b border-border bg-card/50 backdrop-blur-md flex items-center justify-between px-4 lg:px-8 sticky top-0 z-30">
           <div className="flex items-center gap-4 md:hidden">
-            <Button variant="ghost" size="icon" className="text-muted-foreground">
+            <Button variant="ghost" size="icon" className="text-muted-foreground" onClick={() => setIsMobileOpen(true)}>
               <Menu size={20} />
             </Button>
             <div className="flex items-center gap-2 text-primary">
