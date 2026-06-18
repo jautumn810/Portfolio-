@@ -126,7 +126,7 @@ async function main() {
       ownerId: carriers[1].id,
       make: "Volvo", model: "VNL 760", year: 2022, licensePlate: "TRK-VOLVO3", vin: "4V4NC9EH1EN345678",
       truckType: "reefer", status: "available", maxWeight: 44000, maxLength: 53,
-      color: "Arctic White", imageUrl: "https://rockwoodtruckcentre.com/wp-content/uploads/2025/08/WhatsApp-Image-2025-08-08-at-11.34.20-AM.jpeg",
+      color: "Arctic White", imageUrl: "https://orion.soarr.com/photos/16454262/300x/2023-volvo-vnl+760.1.jpg",
       currentLat: 25.7617, currentLng: -80.1918, currentCity: "Miami", currentState: "FL",
       mileage: 210000, fuelLevel: 0.77,
     },
