@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Truck, Plus, MapPin, Gauge, Weight } from "lucide-react";
+import { Truck, Plus, MapPin, Gauge, Weight, X, Fuel, Navigation } from "lucide-react";
 import { useListTrucks, getListTrucksQueryKey, type Truck as TruckType } from "@workspace/api-client-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 
 const STATUS_CONFIG: Record<string, { label: string; color: string; bg: string }> = {
@@ -28,33 +29,121 @@ const TYPE_LABELS: Record<string, string> = {
 
 type TruckWithOwner = TruckType & { owner?: { name?: string; [k: string]: unknown } | null };
 
-function TruckCard({ truck }: { truck: TruckWithOwner }) {
+function TruckDetailModal({ truck, onClose }: { truck: TruckWithOwner; onClose: () => void }) {
+  const statusCfg = STATUS_CONFIG[truck.status] || STATUS_CONFIG.inactive;
+
+  return (
+    <Dialog open onOpenChange={(open) => !open && onClose()}>
+      <DialogContent className="bg-card border border-border max-w-lg">
+        <DialogHeader>
+          <DialogTitle className="flex items-center justify-between pr-6">
+            <span>{truck.year} {truck.make} {truck.model}</span>
+            <Badge className={cn("border text-xs font-medium ml-3", statusCfg.bg, statusCfg.color)}>
+              <span className="w-1.5 h-1.5 rounded-full mr-1.5" style={{ backgroundColor: "currentColor" }} />
+              {statusCfg.label}
+            </Badge>
+          </DialogTitle>
+        </DialogHeader>
+
+        <div className="space-y-5 mt-2">
+          <div className="grid grid-cols-2 gap-3">
+            <div className="bg-muted/30 rounded-lg p-3">
+              <p className="text-xs text-muted-foreground mb-1">License Plate</p>
+              <p className="font-bold text-sm">{truck.licensePlate}</p>
+            </div>
+            <div className="bg-muted/30 rounded-lg p-3">
+              <p className="text-xs text-muted-foreground mb-1">Truck Type</p>
+              <p className="font-bold text-sm">{TYPE_LABELS[truck.truckType] ?? truck.truckType}</p>
+            </div>
+            <div className="bg-muted/30 rounded-lg p-3">
+              <p className="text-xs text-muted-foreground mb-1">Max Weight</p>
+              <p className="font-bold text-sm flex items-center gap-1.5">
+                <Weight size={13} className="text-muted-foreground" />
+                {(truck.maxWeight / 1000).toFixed(0)}K lbs
+              </p>
+            </div>
+            <div className="bg-muted/30 rounded-lg p-3">
+              <p className="text-xs text-muted-foreground mb-1">Max Length</p>
+              <p className="font-bold text-sm">{truck.maxLength} ft</p>
+            </div>
+            <div className="bg-muted/30 rounded-lg p-3">
+              <p className="text-xs text-muted-foreground mb-1">Mileage</p>
+              <p className="font-bold text-sm flex items-center gap-1.5">
+                <Gauge size={13} className="text-muted-foreground" />
+                {truck.mileage.toLocaleString()} mi
+              </p>
+            </div>
+            <div className="bg-muted/30 rounded-lg p-3">
+              <p className="text-xs text-muted-foreground mb-1">Fuel Level</p>
+              <div className="flex items-center gap-2">
+                <Fuel size={13} className="text-muted-foreground" />
+                <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
+                  <div
+                    className={cn(
+                      "h-full rounded-full",
+                      (truck.fuelLevel ?? 0) > 0.5 ? "bg-green-400" :
+                      (truck.fuelLevel ?? 0) > 0.25 ? "bg-amber-400" : "bg-primary"
+                    )}
+                    style={{ width: `${(truck.fuelLevel ?? 0) * 100}%` }}
+                  />
+                </div>
+                <span className="text-xs font-semibold">{Math.round((truck.fuelLevel ?? 0) * 100)}%</span>
+              </div>
+            </div>
+          </div>
+
+          {truck.currentCity && (
+            <div className="flex items-center gap-2 text-sm text-muted-foreground bg-muted/20 rounded-lg p-3">
+              <Navigation size={14} className="text-primary" />
+              <span>Currently in <strong className="text-foreground">{truck.currentCity}, {truck.currentState}</strong></span>
+            </div>
+          )}
+
+          {truck.owner?.name && (
+            <div className="flex items-center gap-3 pt-3 border-t border-border">
+              <div className="w-8 h-8 rounded-full bg-primary/20 text-primary text-sm flex items-center justify-center font-bold">
+                {(truck.owner.name as string).charAt(0)}
+              </div>
+              <div>
+                <p className="text-xs text-muted-foreground">Assigned Owner</p>
+                <p className="font-semibold text-sm">{truck.owner.name as string}</p>
+              </div>
+            </div>
+          )}
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+function TruckCard({ truck, onClick }: { truck: TruckWithOwner; onClick: () => void }) {
   const statusCfg = STATUS_CONFIG[truck.status] || STATUS_CONFIG.inactive;
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-card border border-border rounded-xl overflow-hidden hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 transition-all duration-300 group"
+      onClick={onClick}
+      className="bg-card border border-border rounded-xl overflow-hidden hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 transition-all duration-300 group cursor-pointer"
     >
       {/* Truck header/image area */}
       <div className="h-44 bg-gradient-to-br from-muted/50 to-muted/20 relative flex items-center justify-center overflow-hidden">
         {truck.imageUrl ? (
           <img src={truck.imageUrl} alt={`${truck.make} ${truck.model}`} className="w-full h-full object-cover" />
         ) : (
-          <div className="flex flex-col items-center gap-3">
+          <div className="flex flex-col items-center gap-3 z-10">
             <Truck size={48} className="text-muted-foreground/30" />
             <span className="text-xs text-muted-foreground/50">{TYPE_LABELS[truck.truckType]}</span>
           </div>
         )}
         {/* Status badge overlay */}
-        <div className="absolute top-3 right-3">
+        <div className="absolute top-3 right-3 z-10">
           <Badge className={cn("border text-xs font-medium", statusCfg.bg, statusCfg.color)}>
             <span className="w-1.5 h-1.5 rounded-full mr-1.5" style={{ backgroundColor: "currentColor" }} />
             {statusCfg.label}
           </Badge>
         </div>
-        <div className="absolute inset-0 bg-gradient-to-t from-card/80 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-card/80 to-transparent pointer-events-none" />
       </div>
 
       {/* Truck info */}
@@ -120,6 +209,7 @@ function TruckCard({ truck }: { truck: TruckWithOwner }) {
 export default function TrucksPage() {
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [typeFilter, setTypeFilter] = useState<string>("all");
+  const [selectedTruck, setSelectedTruck] = useState<TruckWithOwner | null>(null);
 
   const { data: trucks, isLoading } = useListTrucks(
     statusFilter !== "all" ? { status: statusFilter as "available" | "in_transit" | "maintenance" | "inactive" } : undefined,
@@ -130,6 +220,10 @@ export default function TrucksPage() {
 
   return (
     <div className="space-y-6">
+      {selectedTruck && (
+        <TruckDetailModal truck={selectedTruck} onClose={() => setSelectedTruck(null)} />
+      )}
+
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-black">Fleet Trucks</h1>
@@ -198,7 +292,11 @@ export default function TrucksPage() {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {filtered?.map((truck) => (
-            <TruckCard key={truck.id} truck={truck as TruckWithOwner} />
+            <TruckCard
+              key={truck.id}
+              truck={truck as TruckWithOwner}
+              onClick={() => setSelectedTruck(truck as TruckWithOwner)}
+            />
           ))}
         </div>
       )}

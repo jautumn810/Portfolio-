@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { User, Mail, Phone, Building, Star, Package, Calendar, Edit, Check } from "lucide-react";
+import { User, Mail, Phone, Building, Star, Package, Calendar, Edit, Check, Inbox } from "lucide-react";
 import { useGetMe, useUpdateUser, getGetMeQueryKey, useListBids } from "@workspace/api-client-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -30,7 +30,7 @@ export default function ProfilePage() {
   const [formData, setFormData] = useState({ name: "", phone: "", company: "" });
 
   const { data: user, isLoading } = useGetMe({ query: { queryKey: getGetMeQueryKey() } });
-  const { data: myBids } = useListBids(
+  const { data: myBids, isLoading: bidsLoading } = useListBids(
     { bidderId: authUser?.id },
     { query: { queryKey: ["bids", authUser?.id], enabled: !!authUser?.id } }
   );
@@ -193,17 +193,31 @@ export default function ProfilePage() {
         </div>
       </motion.div>
 
-      {/* Recent bids */}
-      {recentBids.length > 0 && (
-        <div className="bg-card border border-border rounded-xl overflow-hidden">
-          <div className="p-5 border-b border-border">
-            <h3 className="font-bold">Recent Bids</h3>
+      {/* Recent bids — always rendered */}
+      <div className="bg-card border border-border rounded-xl overflow-hidden">
+        <div className="p-5 border-b border-border flex items-center justify-between">
+          <h3 className="font-bold">Recent Bids</h3>
+          {!bidsLoading && (
+            <span className="text-xs text-muted-foreground">{recentBids.length} bid{recentBids.length !== 1 ? "s" : ""}</span>
+          )}
+        </div>
+
+        {bidsLoading ? (
+          <div className="p-4 space-y-3">
+            {[1, 2, 3].map((i) => <Skeleton key={i} className="h-14 rounded-lg" />)}
           </div>
+        ) : recentBids.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-12 text-muted-foreground">
+            <Inbox size={36} className="mb-3 opacity-20" />
+            <p className="text-sm font-medium">No bids placed yet</p>
+            <p className="text-xs mt-1">Your bid history will appear here</p>
+          </div>
+        ) : (
           <div className="divide-y divide-border">
             {recentBids.map((bid) => (
               <div key={bid.id} className="flex items-center justify-between p-4">
                 <div>
-                  <p className="font-medium text-sm">{bid.load?.title}</p>
+                  <p className="font-medium text-sm">{bid.load?.title ?? `Load #${bid.loadId}`}</p>
                   <p className="text-xs text-muted-foreground">
                     {bid.load?.originCity} → {bid.load?.destCity}
                   </p>
@@ -224,8 +238,8 @@ export default function ProfilePage() {
               </div>
             ))}
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }
