@@ -3,7 +3,7 @@ import app from "./app";
 import { logger } from "./lib/logger";
 import { initSocket, emitEvent } from "./lib/socket";
 import { db, trucksTable } from "@workspace/db";
-import { eq } from "drizzle-orm";
+import { sql, eq } from "drizzle-orm";
 
 const rawPort = process.env["PORT"];
 
@@ -25,6 +25,17 @@ initSocket(httpServer);
 httpServer.listen(port, () => {
   logger.info({ port }, "Server listening (http+socket.io)");
 });
+
+// Auto-migration: add driver location columns if they don't exist
+(async () => {
+  try {
+    await db.execute(sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS current_lat real`);
+    await db.execute(sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS current_lng real`);
+    logger.info("Driver location columns ensured");
+  } catch (err) {
+    logger.error({ err }, "Driver location column migration failed (non-fatal)");
+  }
+})();
 
 // One-time fix: update broken Volvo VNL 760 image URL
 (async () => {

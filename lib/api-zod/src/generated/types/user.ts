@@ -21,6 +21,10 @@ export interface User {
   /** @nullable */
   rating?: number | null;
   totalLoads: number;
+  /** @nullable */
+  currentLat?: number | null;
+  /** @nullable */
+  currentLng?: number | null;
   isActive: boolean;
   createdAt: Date;
 }

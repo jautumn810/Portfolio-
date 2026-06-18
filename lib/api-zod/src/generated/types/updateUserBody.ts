@@ -14,4 +14,8 @@ export interface UpdateUserBody {
   phone?: string | null;
   /** @nullable */
   avatarUrl?: string | null;
+  /** @nullable */
+  currentLat?: number | null;
+  /** @nullable */
+  currentLng?: number | null;
 }

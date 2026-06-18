@@ -14,6 +14,8 @@ export const usersTable = pgTable("users", {
   rating: real("rating"),
   totalLoads: integer("total_loads").notNull().default(0),
   isActive: boolean("is_active").notNull().default(true),
+  currentLat: real("current_lat"),
+  currentLng: real("current_lng"),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow().$onUpdate(() => new Date()),
 });

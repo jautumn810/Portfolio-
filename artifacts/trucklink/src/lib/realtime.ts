@@ -26,8 +26,30 @@ export type TruckPosition = {
   speed: number;
 };
 
+export type DriverLocation = {
+  id: number;
+  name: string;
+  lat: number;
+  lng: number;
+};
+
 const positionListeners = new Set<(positions: TruckPosition[]) => void>();
 let positionListenerAttached = false;
+
+const driverLocationListeners = new Set<(loc: DriverLocation) => void>();
+let driverLocationListenerAttached = false;
+
+export function subscribeDriverLocations(fn: (loc: DriverLocation) => void): () => void {
+  driverLocationListeners.add(fn);
+  if (!driverLocationListenerAttached) {
+    const s = getSocket();
+    s.on("driver:location", (loc: DriverLocation) => {
+      driverLocationListeners.forEach((listener) => listener(loc));
+    });
+    driverLocationListenerAttached = true;
+  }
+  return () => { driverLocationListeners.delete(fn); };
+}
 
 export function subscribeTruckPositions(
   fn: (positions: TruckPosition[]) => void,

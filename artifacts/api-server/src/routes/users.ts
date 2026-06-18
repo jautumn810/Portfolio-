@@ -3,6 +3,7 @@ import { db, usersTable } from "@workspace/db";
 import { eq } from "drizzle-orm";
 import { GetUserParams, UpdateUserBody } from "@workspace/api-zod";
 import { requireAuth } from "../lib/auth";
+import { emitEvent } from "../lib/socket";
 
 const router: IRouter = Router();
 
@@ -11,6 +12,16 @@ router.get("/users", requireAuth, async (req, res): Promise<void> => {
   const users = await db.select().from(usersTable).orderBy(usersTable.createdAt);
   const safeUsers = users.map(({ passwordHash: _, ...u }) => u);
   res.json(safeUsers);
+});
+
+// GET /drivers — all drivers with their locations
+router.get("/drivers", requireAuth, async (req, res): Promise<void> => {
+  const drivers = await db
+    .select()
+    .from(usersTable)
+    .where(eq(usersTable.role, "driver"));
+  const safeDrivers = drivers.map(({ passwordHash: _, ...u }) => u);
+  res.json(safeDrivers);
 });
 
 // GET /users/:id
@@ -63,6 +74,21 @@ router.patch("/users/:id", requireAuth, async (req, res): Promise<void> => {
   }
 
   const { passwordHash: _, ...safeUser } = user;
+
+  // Broadcast live location update for drivers
+  if (
+    user.role === "driver" &&
+    parsed.data.currentLat != null &&
+    parsed.data.currentLng != null
+  ) {
+    emitEvent("driver:location", {
+      id: user.id,
+      name: user.name,
+      lat: user.currentLat,
+      lng: user.currentLng,
+    });
+  }
+
   res.json(safeUser);
 });
 
