@@ -9,11 +9,12 @@ let socket: Socket | null = null;
 export function getSocket(): Socket {
   if (!socket) {
     const apiUrl = import.meta.env.VITE_API_URL as string | undefined;
-    socket = io(apiUrl ?? "", {
+    const opts = {
       path: "/api/socket.io",
-      transports: ["websocket", "polling"],
+      transports: ["websocket", "polling"] as const,
       autoConnect: true,
-    });
+    };
+    socket = apiUrl ? io(apiUrl, opts) : io(opts);
   }
   return socket;
 }
